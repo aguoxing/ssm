@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.mapper.EmployeeMapper">
+
+    <resultMap id="Employee" type="Employee">
+        <id property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="age" column="age" />
+        <result property="sex" column="sex" />
+        <result property="phoneNumber" column="phone_number" />
+        <result property="email" column="email" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <sql id="selectEmployeeVo">
+        select id,username,age,sex,phone_number,email,create_time from t_employee
+    </sql>
+
+    <select id="selectEmployeeList" parameterType="Employee" resultMap="Employee">
+        <include refid="selectEmployeeVo"/>
+        <where>
+            <if test="username != null and username != ''">
+                AND username like concat('%', #{username}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                AND email like concat('%', #{email}, '%')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+</mapper>
